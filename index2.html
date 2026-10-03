@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Купить вирты</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;font-family:system-ui,-apple-system,sans-serif}
+body{background:radial-gradient(circle at 20% 0,#1b59e0,#0a2a8f 45%,#061a5c) fixed;color:#fff;min-height:100vh;padding:14px 14px 110px}
+#app{max-width:480px;margin:auto}
+.wal{position:fixed;top:10px;right:12px;z-index:5;display:flex;align-items:center}
+.wal i{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#1d4fd8);display:grid;place-items:center;font-style:normal;z-index:1}
+.wal b{background:linear-gradient(90deg,#e6efff,#fff);color:#123;border-radius:0 99px 99px 0;padding:8px 14px 8px 20px;margin-left:-14px;font-weight:800}
+h1{text-align:center;font-size:30px;font-weight:900;text-transform:uppercase;margin:38px 0 14px;letter-spacing:.5px}
+h2{text-align:center;font-size:24px;font-weight:900;text-transform:uppercase;line-height:1.1;margin:4px 0}
+.panel{background:rgba(255,255,255,.1);border-radius:26px;padding:16px;margin-bottom:14px;display:grid;gap:12px;border:1px solid rgba(255,255,255,.12)}
+.hr{height:1px;background:rgba(255,255,255,.2)}
+.c{text-align:center}.sm{font-size:13px;opacity:.85;line-height:1.7}
+.hist{display:flex;justify-content:center;gap:8px}
+.hist i{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-style:normal;font-size:21px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.tile{display:flex;height:62px;border-radius:18px;overflow:hidden;color:#fff;border:0;width:100%;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.tile .ic{width:32%;display:grid;place-items:center;font-size:30px;background:rgba(255,255,255,.28)}
+.tile .nm{flex:1;display:grid;place-items:center;font:900 20px system-ui;text-transform:uppercase;text-align:center;line-height:1;padding:0 8px;background:rgba(0,0,0,.12)}
+.warn{background:#fff;color:#111;border-radius:14px;padding:12px;font-weight:800;text-align:center;font-size:14px;position:relative;overflow:hidden;display:flex;gap:8px;justify-content:center;align-items:center}
+.warn:before{content:"VATUTIN";position:absolute;inset:0;display:grid;place-items:center;font:900 44px system-ui;color:transparent;-webkit-text-stroke:2px #e3e6ee;letter-spacing:2px;z-index:0}
+.warn>*{position:relative;z-index:1}.warn .ex{width:24px;height:24px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:14px;flex:none}
+.warn.plain:before{display:none}
+.btn{border:0;border-radius:12px;padding:14px;background:linear-gradient(90deg,#3b82f6,#1d4fd8);color:#fff;font:800 15px system-ui;width:100%;cursor:pointer;text-transform:uppercase}
+.btn:disabled{background:#c3c6cf;color:#fff}
+.lnk{display:flex;gap:12px;align-items:center;font-size:13px;word-break:break-all}
+.lnk i{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#1d4fd8);display:grid;place-items:center;font-style:normal;flex:none}
+.white{background:#fff;color:#111;border-radius:16px;padding:12px;display:grid;gap:8px}
+.mut{font-size:12px;color:#777}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(4,12,50,.88);backdrop-filter:blur(12px);z-index:6}
+nav div{text-align:center;font-size:11px;cursor:pointer;width:25%}
+nav i{display:block;width:40px;height:40px;margin:0 auto 3px;border-radius:12px;background:#fff;font:normal 18px/40px system-ui;color:#123}
+nav .on i{background:#2f6df0;color:#fff}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:10}
+.sheet{background:#eef0f6;color:#111;width:100%;max-width:480px;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:18px 18px 12px;display:grid;gap:9px;position:relative;align-content:start}
+.sheet h2{color:#111;font-size:22px}.sheet label{font-weight:600;font-size:14px;margin-top:2px}
+.x{position:sticky;top:0;justify-self:end;width:30px;height:30px;border:0;border-radius:50%;background:#d9dce6;font-size:15px;margin-bottom:-34px;z-index:3}
+.in{width:100%;padding:13px;border:1px solid #d5d9e4;border-radius:12px;background:#e4e5ea;font:15px system-ui;color:#111}
+.in.w{background:#fff}
+.row{display:flex;gap:8px;align-items:center}.row .in{flex:1}
+.sel{width:100%;text-align:left;padding:13px;border:1px solid #d5d9e4;border-radius:12px;background:#e4e5ea;font:15px system-ui;color:#111;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.sel.m{background:#eaf1ff;color:#1b4fc4;font-weight:800;border-color:#cfe0ff}
+.dd{position:relative}
+.ddl{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.25);max-height:240px;overflow:auto;z-index:8;padding:4px}
+.opt{padding:13px 12px;font-size:14px;display:flex;justify-content:space-between;align-items:center;border-radius:10px;cursor:pointer}
+.opt.cur{background:#ebeaee}.opt.hot{border:1.5px solid #f2c200;background:#fffdf2;font-weight:700}
+.b{font-style:normal;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px}
+.hotb{background:#ffd21a;color:#111}.promob{background:linear-gradient(90deg,#f5a623,#d98a14);color:#111}
+.mt{display:flex;align-items:center;gap:10px;padding:14px;background:#fff;border-radius:14px;cursor:pointer}
+.mt .ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:900;flex:none}
+.mt .q{margin-left:auto;width:26px;height:26px;border:1px solid #ccc;border-radius:50%;display:grid;place-items:center;font-size:13px;color:#666}
+.mt .sp{font-size:11px;font-weight:700;padding:5px 9px;border-radius:99px;border:1px solid}
+.note{background:#fff8d6;border:1px solid #f0dc8a;color:#7a5b00;border-radius:12px;padding:12px;font-size:13px}
+.need{background:#eaf1ff;color:#111;border-radius:12px;padding:13px;font-size:14px}.need b{color:#1b4fc4}
+.red{color:#d11;font-size:13px;font-weight:700}.org{color:#e08a00;font-weight:700}
+.where{background:#2f6df0;color:#fff;border:0;border-radius:99px;padding:3px 11px;font-weight:700;font-size:12px}
+.pay{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;position:sticky;bottom:-12px;background:#eef0f6;padding:8px 0 12px}
+.pay small{display:block;font-size:12px;margin:4px 0 2px}.pay small.p{color:#e08a00;font-weight:700}
+.chip{display:inline-block;font-weight:800;font-size:19px;padding:7px 14px;border-radius:12px;background:linear-gradient(90deg,#d4e4ff,#fff)}
+.chip.g{background:#d9dce4;color:#222}
+.pay .btn{width:52%}
+.chk{display:flex;align-items:center;justify-content:space-between;padding:13px;background:#e4e5ea;border-radius:12px;font-size:14px}
+.chk input{width:22px;height:22px;accent-color:#d11}
+.faq b{display:block;background:#fff;color:#111;border-radius:10px;padding:8px 10px;width:fit-content;max-width:100%}
+.faq p{font-size:13px;line-height:1.45;margin:6px 0 14px}
+</style></head><body>
+<div class="wal"><i>👛</i><b id="bal">0 ₽</b></div><div id="app"></div><div id="ov"></div><nav id="nav"></nav>
+<script>
+// ================= НАСТРОЙКИ =================
+const BOT='your_bot_username', SUPPORT='your_support', REFHOST='your-domain.su'; // без @
+const AVG=['BLACK RUSSIA – 5 м. 37 сек.','GTA 5 RP – 5 м. 48 сек.'];
+const HISTORY=['BLACK RUSSIA','BLACK RUSSIA','BLACK RUSSIA','GTA 5 RP','BLACK RUSSIA'];
+const PROMO={START10:10};
+const FAQ=[['Как вы выдаёте вирты?','На блек раше трейд, банк. На GTA5RP статик, трейд или 5bito, но стоит уточнить по конкретному серверу.'],
+ ['Как быстро мне придут вирты?','Всё зависит от сервера, в среднем выдача занимает около получаса.'],
+ ['Меня забанят за покупку?','Шанс блокировки есть, но он небольшой.'],
+ ['Могу ли я оплатить из Казахстана или Европы?','Да, у нас поддерживаются международные платежи. Для некоторых стран (Украина и т.д) нужно уточнить в поддержке.'],
+ ['Хочу сотрудничать с вами, как?','У нас есть реферальная система, а если у вас есть аудитория, то мы можем предложить вам партнёрство-медийку: напишите нам, вся информация в разделе «Сотрудничество».']];
+// сервера: строка = обычный; {n,tag:'hot'|'promo'} = с бейджем «HOT» / «Акция!»
+const BR=['RED','GREEN','BLUE','YELLOW','ORANGE','PURPLE','LIME','PINK','CHERRY','BLACK','INDIGO','WHITE','MAGENTA','CRIMSON','GOLD','AZURE','PLATINUM','AQUA','GRAY','ICE','CHILLI','CHOCO','MOSCOW','SPB','UFA','SOCHI','KAZAN','SAMARA','ROSTOV','ANAPA','EKB','KRASNODAR','ARZAMAS','NOVOSIB','GROZNY','SARATOV','OMSK','IRKUTSK','VOLGOGRAD','VORONEZH','BELGOROD','MAKHACHKALA','VLADIKAVKAZ','VLADIVOSTOK','KALININGRAD','CHELYABINSK','KRASNOYARSK','CHEBOKSARY','KHABAROVSK','PERM','TULA','RYAZAN','MURMANSK','PENZA','KURSK','ARKHANGELSK','ORENBURG','KIROV','KEMEROVO','TYUMEN','TOLYATTI','IVANOVO','STAVROPOL','SMOLENSK','PSKOV','BRYANSK','OREL','YAROSLAVL','BARNAUL','LIPETSK','ULYANOVSK','YAKUTSK','TAMBOV','BRATSK','ASTRAKHAN','CHITA','KOSTROMA','VLADIMIR','KALUGA','NOVGOROD','TAGANROG','VOLOGDA','TVER','TOMSK','IZHEVSK','SURGUT','PODOLSK','MAGADAN','CHEREPOVETS','NORILSK','ASTANA'].map((n,i)=>(i+1)+' | '+n);
+const GTA=[{n:'MIRROR',tag:'hot'},'1 | DOWNTOWN',{n:'2 | STRAWBERRY',tag:'promo'},'4 | BLACKBERRY','5 | INSQUAD','6 | SUNRISE','7 | RICHMAN','8 | ECLIPSE','11 | ROCKFORD','13 | REDWOOD','15 | MURRIETA','17 | LA PUERTA',{n:'18 | CHILIAD',tag:'promo'}];
+const MAJ=[{n:'MEMPHIS',tag:'hot'},'NEW YORK','DETROIT','CHICAGO','SAN FRANCISCO','ATLANTA','SAN DIEGO','LOS ANGELES','MIAMI','LAS VEGAS','WASHINGTON','DALLAS','BOSTON','HOUSTON','SEATTLE','PHOENIX',{n:'DENVER',tag:'promo'},'PORTLAND','ORLANDO'];
+const RO=['Арбатский','Тверской','Кутузовский'];
+// rate/promoRate/sell — ₽ за 1 млн виртов (1 кк = 1 млн). abs=1: поле «Сумма в виртах» целым числом; 0: в «кк»
+const G={
+ 'GTA 5 RP':{bg:'linear-gradient(90deg,#f5a623,#ffc15a)',ico:'⭐',rate:800,promoRate:650,sell:500,abs:1,meth:1,srv:GTA},
+ 'BLACK RUSSIA':{bg:'linear-gradient(90deg,#b30f14,#f04040)',ico:'🐻',rate:100,sell:80,abs:0,bank:1,perk:1,srv:BR},
+ 'РОССИЯ ОНЛАЙН':{bg:'linear-gradient(90deg,#7c7f87,#b9bcc3)',ico:'🥊',rate:100,sell:80,abs:1,srv:RO},
+ 'MAJESTIC':{bg:'linear-gradient(90deg,#b0103a,#ee3a6a)',ico:'Ⓜ️',rate:100,sell:80,abs:1,srv:MAJ}};
+// =============================================
+const tg=window.Telegram?.WebApp;tg?.ready();tg?.expand();
+const U=tg?.initDataUnsafe?.user||{first_name:'Гость',id:0};
+const $=s=>document.querySelector(s),app=$('#app'),ov=$('#ov');
+const nm=s=>typeof s=='string'?s:s.n,tagOf=s=>typeof s=='string'?'':s.tag;
+let tab='home',O=null,notif={};
+try{notif=JSON.parse(localStorage.getItem('notif')||'{}')}catch(e){}
+const fmt=n=>(Math.round(n*100)/100).toLocaleString('ru',{maximumFractionDigits:2}),toast=m=>tg?tg.showAlert(m):alert(m);
+const tabs=[['profile','Профиль','👤'],['home','Главная','🛍'],['ref','Рефералка','🔗'],['help','Помощь','💬']];
+$('#nav').innerHTML=tabs.map(t=>`<div data-t="${t[0]}"><i>${t[2]}</i>${t[1]}</div>`).join('');
+const refId='REF'+String(U.id||124).padStart(8,'0'),refLink=`${REFHOST}/?link=${refId}`;
+const tile=(n,cls='')=>`<button class="tile" style="background:${G[n].bg}" data-g="${n}"><span class="ic">${G[n].ico}</span><span class="nm">${n}</span></button>`;
+const sup=t=>`<button class="tile" style="background:${t[1].bg}" data-sup><span class="nm" style="font-size:16px">${t[0]}</span><span class="ic">${t[1].ico}</span></button>`;
+const refBox=(h)=>`<h2>${h}</h2><p class="c sm">Приглашайте друзей и знакомых и получайте бонусы от их покупок!</p><button class="btn" data-copy>Скопировать ссылку</button><div class="lnk"><i>🔗</i><span>${refLink}</span></div>`;
+const V={
+home:()=>`<h1>Главная</h1><div class="panel"><div class="c" style="font-weight:700">История последних покупок</div>
+<div class="hist">${HISTORY.map(n=>`<i style="background:${G[n].bg}">${G[n].ico}</i>`).join('')}</div><div class="hr"></div>
+<div class="c sm">Ср. время выдачи за посл. 3 дня:<br>${AVG.join('<br>')}</div><div class="hr"></div>
+<h2>Выбор игры:</h2>${Object.keys(G).map(n=>tile(n)).join('')}
+<div class="warn"><span class="ex">!</span><span>Выберите нужный сервер, чтобы начать операцию!</span></div><div class="hr"></div>${refBox('Реферальная система')}</div>`,
+profile:()=>`<h1>Личные данные</h1><div class="panel"><div class="white"><b style="font-size:18px">${U.first_name}</b><span class="mut">ID: ${U.id}</span></div>
+<div class="white"><b>Уведомления о новых акциях</b><span class="mut">Выберите игру</span>${['BLACK RUSSIA','GTA 5 RP','РОССИЯ ОНЛАЙН','MAJESTIC'].map(n=>`<button class="btn" data-n="${n}">${n}</button>`).join('')}</div>
+<div class="white"><b>История покупок</b><div class="mut c">Нет покупок</div></div><div class="white"><b>Заявки на продажу</b><div class="mut c">Нет заявок</div></div></div>`,
+ref:()=>`<h1>Сотрудничество</h1><div class="panel"><p class="c" style="font-weight:700">Выберите игру</p>${sup(['Стать медийкой GTA 5 RP',G['GTA 5 RP']])}${sup(['Стать медийкой BLACK RUSSIA',G['BLACK RUSSIA']])}
+<div class="warn"><span class="ex">!</span><span>Выберите нужный сервер, чтобы продолжить!</span></div><div class="hr"></div>
+<h2>Рефералка</h2><p class="c sm">Приводи друзей и получай 5% со всех их покупок к себе на баланс!</p><button class="btn" data-copy>Скопировать ссылку</button><div class="lnk"><i>🔗</i><span>${refLink}</span></div>
+<div class="warn plain">Вы пригласили: 0</div><h2>Список выплат</h2><div class="warn plain" style="background:#d9dce4;color:#222">Нет выплат</div></div>`,
+help:()=>`<h1>Помощь</h1><div class="panel">${sup(['Задать вопрос GTA 5 RP',G['GTA 5 RP']])}${sup(['Задать вопрос BLACK RUSSIA',G['BLACK RUSSIA']])}
+<h2>Часто задаваемые вопросы</h2><div class="faq">${FAQ.map(f=>`<b>В: ${f[0]}</b><p>О: ${f[1]}</p>`).join('')}</div>
+<button class="btn" data-doc>Публичная оферта</button><button class="btn" data-doc>Политика конф.</button></div>`};
+function render(){app.innerHTML=V[tab]();document.querySelectorAll('nav div').forEach(d=>d.classList.toggle('on',d.dataset.t==tab))}
+const sheet=h=>{ov.innerHTML=`<div class="ov" data-close><div class="sheet"><button class="x" data-x>✕</button>${h}</div></div>`};
+const close=()=>{ov.innerHTML='';O=null};
+function stepOp(g){const c=G[g];O={g,mode:'',srv:'',pay:'',acct:'',rub:'',v:'',promo:'',dd:0,mm:0};
+ sheet(`<h2>Валюта<br>${g}</h2><p class="mut c">Выберите тип операции</p><button class="btn" style="background:#f5a623" data-op="buy">Купить вирты</button><button class="btn" data-op="sell">Продать вирты</button>${c.perk?`<button class="btn" style="background:#7c7f87;line-height:1.2" data-sup>Суперспособности в игре<br>RVANKA<br><small style="font-weight:600;text-transform:none">пробная версия</small></button>`:''}`)}
+const rateOf=()=>{const c=G[O.g],s=c.srv.find(x=>nm(x)==O.srv);return O.mode=='sell'?c.sell:(c.promoRate&&s&&tagOf(s)=='promo'?c.promoRate:c.rate)};
+function stepForm(){const c=G[O.g],sell=O.mode=='sell',s=c.srv.find(x=>nm(x)==O.srv),pr=!sell&&c.promoRate&&s&&tagOf(s)=='promo';
+ const badge=t=>t=='hot'?'<em class="b hotb">HOT</em>':t=='promo'?'<em class="b promob">Акция!</em>':'';
+ const mlab=O.pay=='static'?'Статик Банк':O.pay=='5vito'?'5VITO':'Выберите метод выдачи';
+ sheet(`<h2>${sell?'Продать':'Купить'}<br>${O.g}</h2><button class="btn" data-ch style="width:auto;margin:auto;padding:12px 34px">Изменить</button>
+ <label>Сервер</label><div class="dd"><button class="sel" data-dd>${O.srv||'Выберите нужный сервер'}<span>▾</span></button>
+ ${O.dd?`<div class="ddl">${c.srv.map(x=>`<div class="opt ${tagOf(x)=='hot'?'hot':''} ${nm(x)==O.srv?'cur':''}" data-s="${nm(x)}">${nm(x)}${badge(tagOf(x))}</div>`).join('')}</div>`:''}</div>
+ <label>Промокод</label><input class="in" id="promo" placeholder="Введите промокод" value="${O.promo}">
+ ${c.bank?`<div class="row" style="justify-content:space-between"><label>Банковский счёт</label><button class="where" data-where>Где?</button></div><input class="in" id="acct" inputmode="numeric" maxlength="6" placeholder="Номер счёта (6 цифр), передача с 3 lvl+" value="${O.acct}">`:''}
+ <label>Сумма в рублях</label><div class="row"><input class="in" id="rub" inputmode="decimal" placeholder="0" value="${O.rub}">₽</div><span class="mut">Максимум: 999 999 ₽</span>
+ <label>Сумма в ${c.abs?'виртах':'КК виртов'}</label><div class="row"><input class="in" id="v" inputmode="decimal" placeholder="0" value="${O.v}">${c.abs?'':'кк'}</div>
+ <span class="mut" id="rt"></span><span class="red" id="min"></span>
+ ${c.meth?`<button class="sel m" data-mm>${mlab}<span>${O.mm?'⌃':'⌄'}</span></button>
+ ${O.mm?`<div class="mt" data-pay="static"><span class="ico" style="background:#e3f7ec;color:#1c9a5a">🏛</span><span><b>Статик</b> <span style="color:#888">Банк</span></span><span class="q">?</span><span class="sp" style="color:#1c9a5a;border-color:#bfe8d0;background:#eefaf3">⚡ Очень быстро</span></div>
+ <div class="mt" data-pay="5vito"><span class="ico" style="background:#e8efff;color:#1b4fc4">5V</span><b>5VITO</b><span class="q">?</span><span class="sp" style="color:#1b4fc4;border-color:#cfe0ff;background:#eaf1ff">⚡ Быстро</span></div>
+ <div class="note">Безопасный метод появится при сумме заказа от 3 500 ₽.</div>`:''}
+ ${O.pay=='5vito'?`<div class="need" id="need"></div><label style="font-size:18px">Номер объявления 5VITO</label><input class="in w" id="acct" inputmode="numeric" placeholder="Номер объявления 5VITO" value="${O.acct}"><span class="mut" id="hint"></span>`:''}`:''}
+ <span class="red" id="e"></span>
+ <div class="pay"><div>${pr?'<small class="p">По акции</small>':''}<span class="chip" id="tot">0 ₽</span>${pr?'<small>Без акции</small><span class="chip g" id="tot2">0 ₽</span>':''}</div><button class="btn" id="go" disabled>Оплатить</button></div>`);upd()}
+function upd(){const c=G[O.g],sell=O.mode=='sell',rate=rateOf(),s=c.srv.find(x=>nm(x)==O.srv),pr=!sell&&c.promoRate&&s&&tagOf(s)=='promo';
+ const num=x=>+String(x).replace(/\s/g,'').replace(',','.')||0,k=num(O.v)/(c.abs?1e6:1),rub=num(O.rub);
+ const pc=sell?0:(PROMO[O.promo.trim().toUpperCase()]||0),pay=rub*(1-pc/100),full=k*c.rate*(1-pc/100);
+ $('#rt').innerHTML=`Текущий курс: ${rate.toFixed(2)} ₽ за 1 ${c.abs?'млн':'кк'} виртов ${pr?'<span class="org">(Акция!)</span>':''}${pc?` <span class="org">(Промокод −${pc}%)</span>`:''}`;
+ $('#min').textContent=pr&&k<1?'Минимум по акции: 1 млн':'';
+ if(!pr&&c.abs)$('#rt').innerHTML+='<br>Минимальный заказ: 1 млн';
+ $('#tot').textContent=fmt(pay)+' ₽';const t2=$('#tot2');if(t2)t2.textContent=fmt(full)+' ₽';
+ const need=$('#need');if(need)need.innerHTML=`🏷 Нужно выставить: <b>${fmt(k*1e6)} виртов</b> на 7 дней`;
+ const h=$('#hint');if(h)h.textContent=`Разместите объявление на ${fmt(k*1e6)} виртов в 5VITO на 7 дней и укажите его номер.`;
+ let e='';
+ if(!O.srv)e='Выберите сервер, чтобы продолжить оплату.';
+ else if(c.meth&&!O.pay)e='Выберите метод выдачи, чтобы продолжить оплату.';
+ else if(k<1)e=pr?'':'Минимальный заказ: 1 млн';
+ else if(rub>999999)e='Максимум: 999 999 ₽';
+ else if(c.bank&&!/^\d{6}$/.test(O.acct))e='Введите номер банковского счёта (6 цифр), чтобы продолжить оплату.';
+ else if(O.pay=='5vito'&&!O.acct.trim())e='Введите номер объявления 5VITO, чтобы продолжить оплату.';
+ $('#e').textContent=e;$('#go').disabled=!!e||k<1;O.k=k;O.total=pay}
+ov.addEventListener('input',e=>{const id=e.target.id;if(!O||!id)return;const c=G[O.g],u=c.abs?1e6:1,rate=rateOf(),num=x=>+String(x).replace(/\s/g,'').replace(',','.')||0;
+ if(id=='rub'){O.rub=e.target.value;const r=num(O.rub);O.v=r?(c.abs?Math.round(r/rate*u).toLocaleString('ru'):String(+(r/rate).toFixed(2))):'';$('#v').value=O.v}
+ else if(id=='v'){O.v=e.target.value;const v=num(O.v);O.rub=v?String(+(v/u*rate).toFixed(2)):'';$('#rub').value=O.rub}
+ else if(id=='promo')O.promo=e.target.value;else if(id=='acct')O.acct=e.target.value;
+ upd()});
+const num0=x=>+String(x).replace(/\s/g,'').replace(',','.')||0;
+document.addEventListener('click',e=>{const t=e.target,el=t.closest('[data-t],[data-g],[data-op],[data-ch],[data-dd],[data-s],[data-mm],[data-pay],[data-copy],[data-sup],[data-where],[data-doc],[data-n],[data-save],[data-x],#go');
+ if(t.matches('.ov'))return close();if(!el)return;const D=el.dataset;
+ if('x' in D)return close();
+ if(D.t){tab=D.t;render()}else if(D.g)stepOp(D.g);else if(D.op){O.mode=D.op;stepForm()}else if('ch' in D)stepOp(O.g);
+ else if('dd' in D){O.dd=O.dd?0:1;O.mm=0;stepForm()}else if(D.s!==undefined){O.srv=D.s;O.dd=0;const c=G[O.g];if(c.promoRate){const r=rateOf(),k=num0(O.v)/1e6;if(k)O.rub=String(+(k*r).toFixed(2))}stepForm()}
+ else if('mm' in D){O.mm=O.mm?0:1;O.dd=0;stepForm()}else if(D.pay){O.pay=D.pay;O.mm=0;stepForm()}
+ else if('copy' in D){navigator.clipboard?.writeText('https://'+refLink).then(()=>toast('Ссылка скопирована'),()=>toast(refLink))}
+ else if('sup' in D){tg?tg.openTelegramLink('https://t.me/'+SUPPORT):open('https://t.me/'+SUPPORT)}
+ else if('where' in D){toast('Номер банковского счёта (6 цифр) смотрите в игре: Телефон → Банк. Передача доступна с 3 уровня.')}
+ else if('doc' in D){toast('Добавьте ссылку на документ в код (data-doc).')}
+ else if(D.n){const g=D.n,sel=notif[g]||[];sheet(`<h2>Уведомления об акциях<br>${g}</h2>${G[g].srv.map(s=>`<label class="chk">${nm(s)}<input type="checkbox" value="${nm(s)}" ${sel.includes(nm(s))?'checked':''}></label>`).join('')}<button class="btn" data-save="${g}" style="position:sticky;bottom:0">Сохранить</button>`)}
+ else if(D.save){notif[D.save]=[...ov.querySelectorAll('input:checked')].map(i=>i.value);try{localStorage.setItem('notif',JSON.stringify(notif))}catch(x){}close();toast('Настройки сохранены')}
+ else if(el.id=='go'&&!el.disabled){const o={game:O.g,server:O.srv,mode:O.mode,method:O.pay||(G[O.g].bank?'bank':''),nick:O.acct,kk:O.k,promo:O.promo.trim()};
+  tg?tg.sendData(JSON.stringify(o)):console.log(o)}});
+render();
+</script></body></html>
